@@ -1,55 +1,58 @@
 package com.todo.mate.server.domain.todo;
 
-
+import com.todo.mate.server.domain.exception.InvalidContent;
 import com.todo.mate.server.enumeration.TodoStatus;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "tb_todo")
 public class Todo {
-    private final TodoId id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "value", column = @Column(name = "content"))
+    })
     private Content content;
-    private final DueDate dueDate;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "value", column = @Column(name = "due_date"))
+    })
+    private DueDate dueDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TodoStatus status;
 
-
-    private Todo(TodoId id, Content content, DueDate dueDate, TodoStatus status) {
-        this.id = id;
-        this.content = content;
-        this.dueDate = dueDate;
-        this.status = status;
-    }
+    protected Todo() {}
 
     public static Todo create(String content, LocalDate dueDate) {
-        return new Todo(
-                null,
-                Content.of(content),
-                DueDate.of(dueDate),
-                TodoStatus.IN_PROGRESS
-        );
+        var due = DueDate.of(dueDate);
+        due.validateIsPast();
+
+        Todo todo = new Todo();
+        todo.content = Content.of(content);
+        todo.dueDate = due;
+        todo.status = TodoStatus.IN_PROGRESS;
+        return todo;
     }
 
-    public static Todo of(Long id, String content, LocalDate dueDate, TodoStatus status) {
-        return new Todo(
-                TodoId.of(id),
-                Content.of(content),
-                DueDate.of(dueDate),
-                TodoStatus.IN_PROGRESS
-        );
+    // ✅ 상태 토글 메서드
+    public void toggleStatus() {
+        this.status = (this.status == TodoStatus.DONE)
+                ? TodoStatus.IN_PROGRESS
+                : TodoStatus.DONE;
     }
 
-    public TodoStatus getStatus() {
-        return status;
-    }
-
-    public TodoId getId() {
-        return id;
-    }
-
-    public Content getContent() {
-        return content;
-    }
-
-    public DueDate getDueDate() {
-        return dueDate;
-    }
+    // ✅ getter
+    public Long getId() { return id; }
+    public String getContent() { return content.value(); }
+    public LocalDate getDueDate() { return dueDate.value(); }
+    public TodoStatus getStatus() { return status; }
 }
