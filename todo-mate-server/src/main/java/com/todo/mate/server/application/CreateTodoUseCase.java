@@ -3,7 +3,7 @@ package com.todo.mate.server.application;
 import com.todo.mate.server.domain.todo.Todo;
 import com.todo.mate.server.domain.todo.TodoId;
 import com.todo.mate.server.infra.db.TodoRepository;
-import com.todo.mate.server.mapper.TodoMapper;
+import com.todo.mate.server.infra.mapper.TodoMapper;
 import org.springframework.stereotype.Component;
 
 @Component

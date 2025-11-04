@@ -1,4 +1,4 @@
-package com.todo.mate.server.mapper;
+package com.todo.mate.server.infra.mapper;
 
 import com.todo.mate.server.domain.todo.Todo;
 import com.todo.mate.server.enumeration.TodoStatus;
