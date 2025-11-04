@@ -15,5 +15,7 @@ public final class TodoId {
         return value;
     }
 
-
+    public Long getValue() {
+        return value;
+    }
 }
