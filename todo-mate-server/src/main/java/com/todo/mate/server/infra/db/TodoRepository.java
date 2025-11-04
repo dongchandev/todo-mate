@@ -1,6 +1,14 @@
 package com.todo.mate.server.infra.db;
 
+import com.todo.mate.server.domain.todo.Todo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
+import java.util.NoSuchElementException;
+
+@Repository
+public interface TodoRepository extends JpaRepository<Todo, Long> {
+    default Todo findByIdOrThrow(long id) {
+        return findById(id).orElseThrow(NoSuchElementException::new);
+    }
 }

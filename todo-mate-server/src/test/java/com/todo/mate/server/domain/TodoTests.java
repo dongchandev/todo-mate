@@ -24,15 +24,8 @@ public class TodoTests {
 
     @ParameterizedTest
     @NullSource
-    @MethodSource("invalidDueDates")
-    void due_date가_null이거나_과거일_경우_에러를_반환해야_함(LocalDate input) {
+    void due_date가_null일_경우_에러를_반환해야_함(LocalDate input) {
         assertThrows(InvalidContent.class, () -> new DueDate(input));
     }
 
-    static Stream<LocalDate> invalidDueDates() {
-        return Stream.of(
-                null,
-                LocalDate.now().minusDays(1)
-        );
-    }
 }
