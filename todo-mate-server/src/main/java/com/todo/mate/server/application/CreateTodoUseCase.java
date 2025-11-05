@@ -1,5 +1,6 @@
 package com.todo.mate.server.application;
 
+import com.todo.mate.server.controller.response.IDResponse;
 import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.infra.db.TodoRepository;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,9 @@ public class CreateTodoUseCase {
         this.todoRepository = todoRepository;
     }
 
-    public Long handle(CreateTodoCommand cmd) {
+    public IDResponse handle(CreateTodoCommand cmd) {
         Todo created = Todo.create(cmd.content(), cmd.dueDate(), cmd.memo());
         Todo todo = todoRepository.save(created);
-        return todo.getId();
+        return IDResponse.of(todo.getId());
     }
 }
