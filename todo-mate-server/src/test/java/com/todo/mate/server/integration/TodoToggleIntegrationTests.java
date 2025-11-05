@@ -1,4 +1,4 @@
-package com.todo.mate.server;
+package com.todo.mate.server.integration;
 
 import com.todo.mate.server.application.CreateTodoUseCase;
 import com.todo.mate.server.application.ToggleTodoUseCase;

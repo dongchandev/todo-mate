@@ -1,9 +1,10 @@
-package com.todo.mate.server;
+package com.todo.mate.server.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.mate.server.application.CreateTodoCommand;
 import com.todo.mate.server.application.CreateTodoUseCase;
 import com.todo.mate.server.controller.request.CreateTodoRequest;
+import com.todo.mate.server.controller.response.IDResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -37,13 +38,19 @@ public class TodoControllerIntegrationTest {
                         .accept("application/json")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
-//                .andExpect(jsonPath("$.value").exists());
     }
 
     @Test
     void todo_toggle_API() throws Exception {
-        Long id = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now(), "3시간동안 집중해서 공부하기"));
-        mockMvc.perform(patch("/todos/{id}/toggle", id))
+        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now(), "3시간동안 집중해서 공부하기"));
+        mockMvc.perform(patch("/todos/{id}/toggle", res.id()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void todo_delete_API() throws Exception {
+        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now(), "3시간동안 집중해서 공부하기"));
+        mockMvc.perform(delete("/todos/{id}", res.id()))
                 .andExpect(status().isOk());
     }
 }
