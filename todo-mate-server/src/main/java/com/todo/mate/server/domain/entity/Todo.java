@@ -1,8 +1,11 @@
-package com.todo.mate.server.domain.todo;
+package com.todo.mate.server.domain.entity;
 
-import com.todo.mate.server.domain.exception.InvalidContent;
+import com.todo.mate.server.domain.vo.Content;
+import com.todo.mate.server.domain.vo.DueDate;
+import com.todo.mate.server.domain.vo.Memo;
 import com.todo.mate.server.enumeration.TodoStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -16,15 +19,19 @@ public class Todo {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "value", column = @Column(name = "content"))
+            @AttributeOverride(name = "content", column = @Column(name = "content", nullable = false))
     })
     private Content content;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "value", column = @Column(name = "due_date"))
+            @AttributeOverride(name = "due_date", column = @Column(name = "due_date", nullable = false))
     })
     private DueDate dueDate;
+
+    @Embedded
+    @AttributeOverride(name = "memo", column = @Column(name = "memo", columnDefinition = "TEXT", nullable = false))
+    private Memo memo;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -32,7 +39,7 @@ public class Todo {
 
     protected Todo() {}
 
-    public static Todo create(String content, LocalDate dueDate) {
+    public static Todo create(String content, LocalDate dueDate, String memo) {
         var due = DueDate.of(dueDate);
         due.validateIsPast();
 
@@ -40,19 +47,19 @@ public class Todo {
         todo.content = Content.of(content);
         todo.dueDate = due;
         todo.status = TodoStatus.IN_PROGRESS;
+        todo.memo = Memo.of(memo);
         return todo;
     }
 
-    // ✅ 상태 토글 메서드
     public void toggleStatus() {
         this.status = (this.status == TodoStatus.DONE)
                 ? TodoStatus.IN_PROGRESS
                 : TodoStatus.DONE;
     }
 
-    // ✅ getter
     public Long getId() { return id; }
     public String getContent() { return content.value(); }
     public LocalDate getDueDate() { return dueDate.value(); }
     public TodoStatus getStatus() { return status; }
+    public String getMemo() { return memo.value(); }
 }

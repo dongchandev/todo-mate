@@ -2,7 +2,7 @@ package com.todo.mate.server;
 
 import com.todo.mate.server.application.CreateTodoUseCase;
 import com.todo.mate.server.application.ToggleTodoUseCase;
-import com.todo.mate.server.domain.todo.Todo;
+import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.enumeration.TodoStatus;
 import com.todo.mate.server.infra.db.TodoRepository;
 import jakarta.transaction.Transactional;
@@ -32,7 +32,7 @@ class TodoToggleIntegrationTests {
     @Test
     void 토글_하면_DB_상태가_반영된다() {
         // given
-        Todo todo = Todo.create("책 읽기", LocalDate.now().plusDays(1));
+        Todo todo = Todo.create("책 읽기", LocalDate.now().plusDays(1), "100p까지 읽기");
         todo = repo.save(todo);
 
         // when: 유스케이스 호출
@@ -52,7 +52,7 @@ class TodoToggleIntegrationTests {
 
     @Test
     void 완료된_Todo를_다시_토글하면_IN_PROGRESS로_변경된다() {
-        Todo todo = Todo.create("산책하기", LocalDate.now().plusDays(1));
+        Todo todo = Todo.create("산책하기", LocalDate.now().plusDays(1), "8시에 산책하기");
         var saved = repo.save(todo);
 
         toggleTodoUseCase.handle(saved.getId()); // → DONE
