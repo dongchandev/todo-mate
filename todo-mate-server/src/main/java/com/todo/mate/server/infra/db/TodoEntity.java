@@ -35,12 +35,6 @@ public class TodoEntity {
         return status;
     }
 
-    public TodoEntity(String content, LocalDate dueDate, TodoStatus status) {
-        this.content = content;
-        this.dueDate = dueDate;
-        this.status = status;
-    }
-
     public TodoEntity(Long id, String content, LocalDate dueDate, TodoStatus status) {
         this.id = id;
         this.content = content;

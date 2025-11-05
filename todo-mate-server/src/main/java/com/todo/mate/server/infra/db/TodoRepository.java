@@ -1,6 +1,6 @@
 package com.todo.mate.server.infra.db;
 
-import com.todo.mate.server.domain.todo.Todo;
+import com.todo.mate.server.domain.entity.Todo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

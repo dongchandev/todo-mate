@@ -1,7 +1,6 @@
-package com.todo.mate.server.domain.todo;
+package com.todo.mate.server.domain.vo;
 
 import com.todo.mate.server.domain.exception.InvalidContent;
-import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
@@ -10,7 +9,7 @@ public final class DueDate {
 
     protected DueDate() {}
 
-    public DueDate(LocalDate value) {
+    private DueDate(LocalDate value) {
         if (value == null)
             throw new InvalidContent("날짜는 null이 될 수 없습니다.");
 

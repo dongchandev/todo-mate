@@ -1,6 +1,6 @@
 package com.todo.mate.server.application;
 
-import com.todo.mate.server.domain.todo.Todo;
+import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.infra.db.TodoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;

@@ -3,7 +3,7 @@ package com.todo.mate.server;
 import com.todo.mate.server.application.CreateTodoCommand;
 import com.todo.mate.server.application.CreateTodoUseCase;
 import com.todo.mate.server.domain.exception.InvalidContent;
-import com.todo.mate.server.domain.todo.Todo;
+import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.enumeration.TodoStatus;
 import com.todo.mate.server.infra.db.TodoRepository;
 import jakarta.transaction.Transactional;
@@ -28,30 +28,31 @@ public class TodoAddTests {
 
     @Test
     void 정상_생성시_DB에_저장되고_ID_반환() {
-        Long id = createTodoUseCase.handle(CreateTodoCommand.of("독서하기", LocalDate.now()));
+        Long id = createTodoUseCase.handle(CreateTodoCommand.of("독서하기", LocalDate.now(), "100p 까지 읽기"));
 
-        var entity = todoRepository.findById(id).orElseThrow();
+        Todo entity = todoRepository.findById(id).orElseThrow();
         assertEquals("독서하기", entity.getContent());
         assertEquals(TodoStatus.IN_PROGRESS, entity.getStatus());
+        assertEquals("100p 까지 읽기", entity.getMemo());
     }
 
     @Test
     void Todo만들기의_날짜는_과거로_설정할_수_없음() {
         assertThrows(
                 InvalidContent.class,
-                () -> Todo.create("공부하기", LocalDate.now().minusDays(1)) // 실행 람다
+                () -> Todo.create("공부하기", LocalDate.now().minusDays(1),"100p까지 공부하기")
         );
     }
 
     @Test
     void Todo만들기의_결과가_null_이_아니여야_함() {
-        Todo todo = Todo.create("공부하기", LocalDate.now());
+        Todo todo = Todo.create("공부하기", LocalDate.now(),"100p까지 공부하기");
         assertThat(todo).as("todo not created").isNotNull();
     }
 
     @Test
     void 생성시_상태는_IN_PROGRESS_여야_함() {
-        Todo todo = Todo.create("공부하기",LocalDate.now());
+        Todo todo = Todo.create("공부하기",LocalDate.now(),"100p까지 공부하기");
         assertEquals(TodoStatus.IN_PROGRESS, todo.getStatus());
     }
 

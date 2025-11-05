@@ -29,7 +29,7 @@ public class TodoControllerIntegrationTest {
     @Test
     void todo_생성_API() throws Exception {
         // given
-        CreateTodoRequest request = new CreateTodoRequest("TDD 공부", LocalDate.now());
+        CreateTodoRequest request = new CreateTodoRequest("TDD 공부", LocalDate.now(), "TDD로 숫자야구 만들기");
 
         // when + then
         mockMvc.perform(post("/todos")
@@ -42,7 +42,7 @@ public class TodoControllerIntegrationTest {
 
     @Test
     void todo_toggle_API() throws Exception {
-        Long id = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now()));
+        Long id = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now(), "3시간동안 집중해서 공부하기"));
         mockMvc.perform(patch("/todos/{id}/toggle", id))
                 .andExpect(status().isOk());
     }
