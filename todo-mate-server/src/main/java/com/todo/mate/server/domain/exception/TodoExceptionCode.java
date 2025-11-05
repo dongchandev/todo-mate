@@ -6,7 +6,9 @@ public enum TodoExceptionCode implements ExceptionCode {
     DUE_DATE_NOT_NULL(400, "날짜는 null일 수 없습니다."),
     DUE_DATE_NOT_PAST(400, "등록날짜는 과거가 될 수 없습니다."),
     MEMO_NOT_NULL(400, "메모는 null일 수 없습니다."),
-    MEMO_NOT_OVER_1000(400, "메모는 1000자 초과일 수 없습니다."),;
+    MEMO_NOT_OVER_1000(400, "메모는 1000자 초과일 수 없습니다."),
+    DELETED_TODO_NOT_DELETE(400, "삭제된 todo는 삭제할 수 없습니다."),
+    ;
 
 
     private final int status;

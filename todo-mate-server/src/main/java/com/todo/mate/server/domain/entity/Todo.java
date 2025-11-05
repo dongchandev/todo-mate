@@ -1,11 +1,12 @@
 package com.todo.mate.server.domain.entity;
 
+import com.todo.mate.server.domain.exception.InvalidContent;
+import com.todo.mate.server.domain.exception.TodoExceptionCode;
 import com.todo.mate.server.domain.vo.Content;
 import com.todo.mate.server.domain.vo.DueDate;
 import com.todo.mate.server.domain.vo.Memo;
 import com.todo.mate.server.enumeration.TodoStatus;
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -37,6 +38,9 @@ public class Todo {
     @Column(nullable = false)
     private TodoStatus status;
 
+    @Column(nullable = false)
+    private Boolean isDeleted = Boolean.FALSE;
+
     protected Todo() {}
 
     public static Todo create(String content, LocalDate dueDate, String memo) {
@@ -48,7 +52,13 @@ public class Todo {
         todo.dueDate = due;
         todo.status = TodoStatus.IN_PROGRESS;
         todo.memo = Memo.of(memo);
+        todo.isDeleted = Boolean.FALSE;
         return todo;
+    }
+
+    public void delete(){
+        if (isDeleted) throw new InvalidContent(TodoExceptionCode.DELETED_TODO_NOT_DELETE);
+        this.isDeleted = Boolean.TRUE;
     }
 
     public void toggleStatus() {
@@ -62,4 +72,5 @@ public class Todo {
     public LocalDate getDueDate() { return dueDate.value(); }
     public TodoStatus getStatus() { return status; }
     public String getMemo() { return memo.value(); }
+    public Boolean getIsDeleted() { return isDeleted; }
 }

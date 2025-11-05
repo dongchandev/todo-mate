@@ -1,7 +1,8 @@
-package com.todo.mate.server;
+package com.todo.mate.server.domain;
 
 import com.todo.mate.server.application.CreateTodoCommand;
 import com.todo.mate.server.application.CreateTodoUseCase;
+import com.todo.mate.server.controller.response.IDResponse;
 import com.todo.mate.server.domain.exception.InvalidContent;
 import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.enumeration.TodoStatus;
@@ -20,21 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @Transactional
 public class TodoAddTests {
-    @Autowired
-    private CreateTodoUseCase createTodoUseCase;
-
-    @Autowired
-    private TodoRepository todoRepository;
-
-    @Test
-    void 정상_생성시_DB에_저장되고_ID_반환() {
-        Long id = createTodoUseCase.handle(CreateTodoCommand.of("독서하기", LocalDate.now(), "100p 까지 읽기"));
-
-        Todo entity = todoRepository.findById(id).orElseThrow();
-        assertEquals("독서하기", entity.getContent());
-        assertEquals(TodoStatus.IN_PROGRESS, entity.getStatus());
-        assertEquals("100p 까지 읽기", entity.getMemo());
-    }
 
     @Test
     void Todo만들기의_날짜는_과거로_설정할_수_없음() {

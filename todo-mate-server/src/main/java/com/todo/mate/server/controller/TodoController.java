@@ -1,6 +1,7 @@
 package com.todo.mate.server.controller;
 
 import com.todo.mate.server.application.CreateTodoUseCase;
+import com.todo.mate.server.application.DeleteTodoUseCase;
 import com.todo.mate.server.application.ToggleTodoUseCase;
 import com.todo.mate.server.controller.request.CreateTodoRequest;
 import com.todo.mate.server.controller.response.IDResponse;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class TodoController {
     private final CreateTodoUseCase createTodoUseCase;
     private final ToggleTodoUseCase toggleTodoUseCase;
+    private final DeleteTodoUseCase deleteTodoUseCase;
 
-    public TodoController(CreateTodoUseCase createTodoUseCase, ToggleTodoUseCase toggleTodoUseCase) {
+    public TodoController(CreateTodoUseCase createTodoUseCase, ToggleTodoUseCase toggleTodoUseCase, DeleteTodoUseCase deleteTodoUseCase) {
         this.createTodoUseCase = createTodoUseCase;
         this.toggleTodoUseCase = toggleTodoUseCase;
+        this.deleteTodoUseCase = deleteTodoUseCase;
     }
 
     @PostMapping
@@ -30,5 +33,11 @@ public class TodoController {
     public Response<Void> toggleTodo(@PathVariable Long id) {
         toggleTodoUseCase.handle(id);
         return Response.ok("Todo 체크 성공");
+    }
+
+    @DeleteMapping("/{id}")
+    public Response<Void> deleteTodo(@PathVariable Long id) {
+        deleteTodoUseCase.handle(id);
+        return Response.ok("Todo 삭제 성공");
     }
 }
