@@ -26,11 +26,10 @@ public class TodoAddIntegrationTests {
 
     @Test
     void 정상_생성시_DB에_저장되고_ID_반환() {
-        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("독서하기", LocalDate.now(), "100p 까지 읽기"));
+        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("독서하기", LocalDate.now()));
 
         Todo entity = todoRepository.findById(res.id()).orElseThrow();
         assertEquals("독서하기", entity.getContent());
         assertEquals(TodoStatus.IN_PROGRESS, entity.getStatus());
-        assertEquals("100p 까지 읽기", entity.getMemo());
     }
 }

@@ -8,6 +8,7 @@ public enum TodoExceptionCode implements ExceptionCode {
     MEMO_NOT_NULL(400, "메모는 null일 수 없습니다."),
     MEMO_NOT_OVER_1000(400, "메모는 1000자 초과일 수 없습니다."),
     DELETED_TODO_NOT_DELETE(400, "삭제된 todo는 삭제할 수 없습니다."),
+    UPDATE_VALUE_REQUIRED(400, "수정할 데이터가 없습니다."),
     ;
 
 

@@ -32,7 +32,7 @@ class TodoToggleIntegrationTests {
     @Test
     void 토글_하면_DB_상태가_반영된다() {
         // given
-        Todo todo = Todo.create("책 읽기", LocalDate.now().plusDays(1), "100p까지 읽기");
+        Todo todo = Todo.create("책 읽기", LocalDate.now().plusDays(1));
         todo = repo.save(todo);
 
         // when: 유스케이스 호출
@@ -52,7 +52,7 @@ class TodoToggleIntegrationTests {
 
     @Test
     void 완료된_Todo를_다시_토글하면_IN_PROGRESS로_변경된다() {
-        Todo todo = Todo.create("산책하기", LocalDate.now().plusDays(1), "8시에 산책하기");
+        Todo todo = Todo.create("산책하기", LocalDate.now().plusDays(1));
         var saved = repo.save(todo);
 
         toggleTodoUseCase.handle(saved.getId()); // → DONE

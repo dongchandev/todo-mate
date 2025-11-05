@@ -13,6 +13,6 @@ public record CreateTodoRequest(
     @NotNull String memo
 ) {
     public CreateTodoCommand toCommand() {
-        return new CreateTodoCommand(content, dueDate, memo);
+        return new CreateTodoCommand(content, dueDate);
     }
 }

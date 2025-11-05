@@ -1,6 +1,6 @@
 package com.todo.mate.server.domain.vo;
 
-import com.todo.mate.server.domain.exception.InvalidContent;
+import com.todo.mate.server.domain.exception.InvalidValue;
 import com.todo.mate.server.domain.exception.TodoExceptionCode;
 
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ public final class DueDate {
 
     private DueDate(LocalDate value) {
         if (value == null)
-            throw new InvalidContent(TodoExceptionCode.DUE_DATE_NOT_NULL);
+            throw new InvalidValue(TodoExceptionCode.DUE_DATE_NOT_NULL);
 
         this.dueDate = value;
     }
@@ -23,7 +23,7 @@ public final class DueDate {
 
     public void validateIsPast () {
         if (dueDate.isBefore(LocalDate.now()))
-            throw new InvalidContent(TodoExceptionCode.DUE_DATE_NOT_PAST);
+            throw new InvalidValue(TodoExceptionCode.DUE_DATE_NOT_PAST);
     }
 
     public LocalDate value() { return dueDate; }

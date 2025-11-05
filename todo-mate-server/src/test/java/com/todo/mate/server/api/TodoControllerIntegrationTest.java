@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.mate.server.application.CreateTodoCommand;
 import com.todo.mate.server.application.CreateTodoUseCase;
 import com.todo.mate.server.controller.request.CreateTodoRequest;
+import com.todo.mate.server.controller.request.UpdateTodoRequest;
 import com.todo.mate.server.controller.response.IDResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -29,10 +30,8 @@ public class TodoControllerIntegrationTest {
 
     @Test
     void todo_생성_API() throws Exception {
-        // given
         CreateTodoRequest request = new CreateTodoRequest("TDD 공부", LocalDate.now(), "TDD로 숫자야구 만들기");
 
-        // when + then
         mockMvc.perform(post("/todos")
                         .contentType("application/json")
                         .accept("application/json")
@@ -42,15 +41,28 @@ public class TodoControllerIntegrationTest {
 
     @Test
     void todo_toggle_API() throws Exception {
-        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now(), "3시간동안 집중해서 공부하기"));
+        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now()));
         mockMvc.perform(patch("/todos/{id}/toggle", res.id()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void todo_delete_API() throws Exception {
-        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now(), "3시간동안 집중해서 공부하기"));
+        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now()));
         mockMvc.perform(delete("/todos/{id}", res.id()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void todo_update_API() throws Exception {
+        UpdateTodoRequest request = new UpdateTodoRequest("TDD 공부", "TDD로 숫자야구 만들기");
+
+        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now()));
+        mockMvc.perform(patch("/todos/{id}", res.id())
+                        .contentType("application/json")
+                        .accept("application/json")
+                        .content(objectMapper.writeValueAsString(request))
+                )
                 .andExpect(status().isOk());
     }
 }

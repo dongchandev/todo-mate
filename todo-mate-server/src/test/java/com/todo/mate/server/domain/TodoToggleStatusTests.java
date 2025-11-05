@@ -18,7 +18,7 @@ public class TodoToggleStatusTests {
 
     @Test
     void 생성시_IN_PROGRESS이며_toggle하면_DONE이_된다() {
-        Todo todo = create("공부하기", LocalDate.now().plusDays(1),"100p까지 공부하기");
+        Todo todo = create("공부하기", LocalDate.now().plusDays(1));
 
         assertEquals(TodoStatus.IN_PROGRESS, todo.getStatus());
 
@@ -29,7 +29,7 @@ public class TodoToggleStatusTests {
 
     @Test
     void 두번_toggle하면_원래_상태로_돌아와야_함() {
-        Todo todo = create("공부하기", LocalDate.now().plusDays(1),"100p까지 공부하기");
+        Todo todo = create("공부하기", LocalDate.now().plusDays(1));
 
         todo.toggleStatus();
         todo.toggleStatus();

@@ -1,6 +1,6 @@
 package com.todo.mate.server.domain.entity;
 
-import com.todo.mate.server.domain.exception.InvalidContent;
+import com.todo.mate.server.domain.exception.InvalidValue;
 import com.todo.mate.server.domain.exception.TodoExceptionCode;
 import com.todo.mate.server.domain.vo.Content;
 import com.todo.mate.server.domain.vo.DueDate;
@@ -43,7 +43,7 @@ public class Todo {
 
     protected Todo() {}
 
-    public static Todo create(String content, LocalDate dueDate, String memo) {
+    public static Todo create(String content, LocalDate dueDate) {
         var due = DueDate.of(dueDate);
         due.validateIsPast();
 
@@ -51,13 +51,27 @@ public class Todo {
         todo.content = Content.of(content);
         todo.dueDate = due;
         todo.status = TodoStatus.IN_PROGRESS;
-        todo.memo = Memo.of(memo);
+        todo.memo = Memo.of("");
         todo.isDeleted = Boolean.FALSE;
         return todo;
     }
 
-    public void delete(){
-        if (isDeleted) throw new InvalidContent(TodoExceptionCode.DELETED_TODO_NOT_DELETE);
+    public void update(String newContent, String newMemo) {
+        if (newContent == null && newMemo == null) {
+            throw new InvalidValue(TodoExceptionCode.UPDATE_VALUE_REQUIRED);
+        }
+
+        if (newContent != null) {
+            this.content = Content.of(newContent);
+        }
+
+        if (newMemo != null) {
+            this.memo = Memo.of(newMemo);
+        }
+    }
+
+    public void delete() {
+        if (isDeleted) throw new InvalidValue(TodoExceptionCode.DELETED_TODO_NOT_DELETE);
         this.isDeleted = Boolean.TRUE;
     }
 
@@ -69,7 +83,6 @@ public class Todo {
 
     public Long getId() { return id; }
     public String getContent() { return content.value(); }
-    public LocalDate getDueDate() { return dueDate.value(); }
     public TodoStatus getStatus() { return status; }
     public String getMemo() { return memo.value(); }
     public Boolean getIsDeleted() { return isDeleted; }
