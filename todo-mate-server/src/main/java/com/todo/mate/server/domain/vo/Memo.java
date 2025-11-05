@@ -1,6 +1,7 @@
 package com.todo.mate.server.domain.vo;
 
 import com.todo.mate.server.domain.exception.InvalidContent;
+import com.todo.mate.server.domain.exception.TodoExceptionCode;
 
 public class Memo {
     private String memo;
@@ -9,10 +10,10 @@ public class Memo {
 
     private Memo(String memo) {
         if (memo == null)
-            throw new InvalidContent("메모는 null이 될 수 없습니다.");
+            throw new InvalidContent(TodoExceptionCode.MEMO_NOT_NULL);
 
         if (memo.length() > 1000)
-            throw new InvalidContent("메모의 길이는 1000이상일 수 없습니다.");
+            throw new InvalidContent(TodoExceptionCode.MEMO_NOT_OVER_1000);
 
         this.memo = memo;
     }

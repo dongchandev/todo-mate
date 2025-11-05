@@ -1,6 +1,7 @@
 package com.todo.mate.server.domain.vo;
 
 import com.todo.mate.server.domain.exception.InvalidContent;
+import com.todo.mate.server.domain.exception.TodoExceptionCode;
 
 public final class Content {
     private String content;
@@ -9,7 +10,7 @@ public final class Content {
 
     private Content(String value) {
         if (value == null || value.trim().isEmpty())
-            throw new InvalidContent("내용은 비어 있을 수 없습니다.");
+            throw new InvalidContent(TodoExceptionCode.CONTENT_NOT_BLANK);
         this.content = value;
     }
 

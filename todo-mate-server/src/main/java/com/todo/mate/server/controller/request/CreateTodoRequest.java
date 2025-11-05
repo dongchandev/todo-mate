@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public record CreateTodoRequest(
     @NotBlank String content,
     @NotNull @FutureOrPresent LocalDate dueDate,
-    String memo
+    @NotNull String memo
 ) {
     public CreateTodoCommand toCommand() {
         return new CreateTodoCommand(content, dueDate, memo);

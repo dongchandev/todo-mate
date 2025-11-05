@@ -6,7 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 @Component
-@Transactional(rollbackOn = RuntimeException.class)
+@Transactional(rollbackOn = Exception.class)
 public class ToggleTodoUseCase {
     private final TodoRepository todoRepository;
     public ToggleTodoUseCase(TodoRepository todoRepository) {

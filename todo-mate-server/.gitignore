@@ -39,3 +39,4 @@ out/
 mysql-data/**
 docker-compose.yml
 application.yml
+**.http

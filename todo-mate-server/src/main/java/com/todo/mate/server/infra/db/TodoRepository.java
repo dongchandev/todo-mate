@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
     default Todo findByIdOrThrow(long id) {
-        return findById(id).orElseThrow(NoSuchElementException::new);
+        return findById(id).orElseThrow(()->
+                new NoSuchElementException("해당 id의 todo를 찾을 수 없습니다.")
+        );
     }
 }
