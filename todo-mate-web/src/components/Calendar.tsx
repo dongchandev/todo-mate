@@ -78,7 +78,13 @@ export default function Calendar({
                         >
                             <DateNumber>{d.date()}</DateNumber>
                             <RemainingCount $zero={remaining === 0}>
-                                {remaining > 0 ? `${remaining}개 남음` : "완료 🎉"}
+                                {loading ? (
+                                    "로딩 중"
+                                ) : remaining > 0 ? (
+                                    `${remaining}개 남음`
+                                ) : (
+                                    "완료"
+                                )}
                             </RemainingCount>
                         </DayCell>
                     );
