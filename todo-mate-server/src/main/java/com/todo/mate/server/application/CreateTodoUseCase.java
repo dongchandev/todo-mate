@@ -13,9 +13,9 @@ public class CreateTodoUseCase {
         this.todoRepository = todoRepository;
     }
 
-    public IDResponse handle(CreateTodoCommand cmd) {
+    public TodoResponse handle(CreateTodoCommand cmd) {
         Todo created = Todo.create(cmd.content(), cmd.dueDate());
         Todo todo = todoRepository.save(created);
-        return IDResponse.of(todo.getId());
+        return TodoResponse.of(todo);
     }
 }

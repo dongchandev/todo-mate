@@ -23,7 +23,7 @@ public class TodoController {
     }
 
     @PostMapping
-    public Response<IDResponse> createTodo(@RequestBody CreateTodoRequest request) {
+    public Response<TodoResponse> createTodo(@RequestBody CreateTodoRequest request) {
         return Response.created(
                 "Todo 생성 성공",
                 createTodoUseCase.handle(request.toCommand())
@@ -31,9 +31,12 @@ public class TodoController {
     }
 
     @PatchMapping("/{id}")
-    public Response<Void> updateTodo(@PathVariable Long id, @RequestBody UpdateTodoRequest request) {
-        updateTodoUseCase.handle(request.toCommand(id));
-        return Response.ok("Todo 수정 성공");
+    public Response<TodoResponse> updateTodo(@PathVariable Long id, @RequestBody UpdateTodoRequest request) {
+
+        return Response.ok(
+                "Todo 수정 성공",
+                updateTodoUseCase.handle(request.toCommand(id))
+        );
     }
 
     @PatchMapping("/{id}/toggle")

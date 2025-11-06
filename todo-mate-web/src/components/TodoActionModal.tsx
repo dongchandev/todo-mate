@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { Pencil, Trash2, FileText, Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function TodoActionModal({
                                             todo,
@@ -19,10 +19,6 @@ export default function TodoActionModal({
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(todo.text);
     const [memo, setMemo] = useState(todo.memo || "");
-
-    useEffect(() => {
-        onEditMemo(todo.id, memo);
-    }, [memo, onEditMemo, todo.id]);
 
     const modalRoot = document.getElementById("modal-root") || document.body;
 
@@ -69,9 +65,13 @@ export default function TodoActionModal({
                     <FileText size={18} />
                     <span>메모</span>
                 </MemoBox>
+
                 <MemoArea
                     value={memo}
                     onChange={(e) => setMemo(e.target.value)}
+                    onBlur={() => {
+                        if (memo !== todo.memo) onEditMemo(todo.id, memo);
+                    }}
                     placeholder="메모를 입력하세요..."
                 />
             </Modal>

@@ -13,9 +13,9 @@ public class UpdateTodoUseCase {
         this.todoRepository = todoRepository;
     }
 
-    public void handle(UpdateTodoCommand cmd) {
+    public TodoResponse handle(UpdateTodoCommand cmd) {
         Todo todo = todoRepository.findByIdOrThrow(cmd.id());
         todo.update(cmd.content(), cmd.memo());
-        todoRepository.save(todo);
+        return TodoResponse.of(todoRepository.save(todo));
     }
 }

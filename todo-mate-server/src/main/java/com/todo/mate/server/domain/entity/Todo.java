@@ -84,6 +84,7 @@ public class Todo {
     public Long getId() { return id; }
     public String getContent() { return content.value(); }
     public TodoStatus getStatus() { return status; }
+    public LocalDate getDueDate() { return dueDate.value(); }
     public String getMemo() { return memo.value(); }
     public Boolean getIsDeleted() { return isDeleted; }
 }

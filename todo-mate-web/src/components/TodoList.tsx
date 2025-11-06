@@ -4,14 +4,8 @@ import styled from "styled-components";
 import TodoItem from "./TodoItem";
 import TodoInput from "./TodoInput";
 import TodoActionModal from "./TodoActionModal";
-
-interface Todo {
-    id: number;
-    text: string;
-    date: string;
-    memo?: string;
-    status: "IN_PROGRESS" | "DONE";
-}
+import TodoApi from "../api/TodoApi.ts";
+import type {Todo} from "../model/Todo.ts";
 
 interface Props {
     date: Dayjs;
@@ -25,20 +19,20 @@ export default function TodoList({ date }: Props) {
         (t) => t.date === date.format("YYYY-MM-DD")
     );
 
-    const handleAdd = (text: string) => {
-        if (!text.trim()) return;
+    const handleAdd = async (text: string) => {
 
-        const newTodo: Todo = {
-            id: Date.now(),
-            text,
-            date: date.format("YYYY-MM-DD"),
-            memo: "",
-            status: "IN_PROGRESS",
-        };
-        setTodos([newTodo, ...todos]);
+        try {
+            if (!text.trim()) return;
+            const newTodo = await TodoApi.createTodo(text, date.format("YYYY-MM-DD"));
+            setTodos((prev) => [newTodo, ...prev]);
+        } catch (e) {
+            console.error(e);
+            alert("할 일 추가 중 오류 발생!");
+        }
     };
 
-    const handleToggle = (id: number) => {
+    const handleToggle = async (id: number) => {
+        await TodoApi.toggleTodo(id)
         setTodos((prev) =>
             prev.map((t) =>
                 t.id === id
@@ -52,19 +46,22 @@ export default function TodoList({ date }: Props) {
         );
     };
 
-    const handleDelete = (id: number) => {
+    const handleDelete = async (id: number) => {
+        await TodoApi.deleteTodo(id);
         setTodos((prev) => prev.filter((t) => t.id !== id));
         setSelectedTodo(null);
     };
 
-    const handleEdit = (id: number, newText: string) => {
+    const handleEdit = async (id: number, newText: string) => {
+        await TodoApi.updateTodo(id, newText, undefined);
         setTodos((prev) =>
             prev.map((t) => (t.id === id ? { ...t, text: newText } : t))
         );
         setSelectedTodo(null);
     };
 
-    const handleEditMemo = (id: number, newMemo: string) => {
+    const handleEditMemo = async (id: number, newMemo: string) => {
+        await TodoApi.updateTodo(id, undefined, newMemo);
         setTodos((prev) =>
             prev.map((t) => (t.id === id ? { ...t, memo: newMemo } : t))
         );

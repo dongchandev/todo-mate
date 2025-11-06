@@ -1,13 +1,7 @@
 import styled from "styled-components";
 import { MoreHorizontal } from "lucide-react";
+import type {Todo} from "../model/Todo.ts";
 
-interface Todo {
-    id: number;
-    text: string;
-    date: string;
-    memo?: string;
-    status: "IN_PROGRESS" | "DONE";
-}
 
 interface Props {
     todo: Todo;
