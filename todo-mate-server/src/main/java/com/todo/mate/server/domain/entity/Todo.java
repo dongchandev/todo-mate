@@ -62,17 +62,21 @@ public class Todo {
     }
 
     public void update(String newContent, String newMemo) {
-        if (newContent == null && newMemo == null) {
+        if (isBlank(newContent) && isBlank(newMemo)) {
             throw new InvalidValue(TodoExceptionCode.UPDATE_VALUE_REQUIRED);
         }
 
-        if (newContent != null) {
-            this.content = Content.of(newContent);
+        if (!isBlank(newContent)) {
+            this.content = Content.of(newContent.trim());
         }
 
-        if (newMemo != null) {
-            this.memo = Memo.of(newMemo);
+        if (!isBlank(newMemo)) {
+            this.memo = Memo.of(newMemo.trim());
         }
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 
     public void delete() {

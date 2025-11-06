@@ -9,11 +9,18 @@ export default class TodoApi {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ content, dueDate }),
         });
-
         const result: ApiResponse<Todo> = await response.json();
-        console.log("📬 응답:", result);
 
-        return result.data!;
+
+        if (result.status == 201) {
+            return result.data!;
+        } else if (result.status == 400) {
+            alert(result.message);
+            throw new Error
+        } else {
+            alert("Todo 생성 중 오류가 발생했습니다.");
+            throw new Error
+        }
     };
 
     static updateTodo = async (id:number, content: string | undefined, memo: string | undefined): Promise<Todo> => {
@@ -24,7 +31,16 @@ export default class TodoApi {
         });
 
         const result: ApiResponse<Todo> = await response.json();
-        console.log("📬 응답:", result);
+
+        if (result.status == 201) {
+            return result.data!;
+        } else if (result.status == 400) {
+            alert(result.message);
+            throw new Error
+        } else {
+            alert("Todo 수정 중 오류가 발생했습니다.");
+            throw new Error
+        }
 
         return result.data!;
     };
