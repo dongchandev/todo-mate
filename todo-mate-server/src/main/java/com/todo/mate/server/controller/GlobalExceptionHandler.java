@@ -47,6 +47,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Response<Void>> handleException(Exception e, HttpServletRequest request) {
+        System.out.println(e.getMessage());
         return ResponseEntity
                 .status(500)
                 .body(Response.of(

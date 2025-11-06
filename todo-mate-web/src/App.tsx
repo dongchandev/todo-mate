@@ -3,29 +3,15 @@ import PageContainer from "./components/PageContainer.tsx";
 import TodoList from "./components/TodoList.tsx";
 import Calendar from "./components/Calendar.tsx";
 import styled from "styled-components";
-import TodoApi from "./api/TodoApi.ts";
-import {useEffect, useState} from "react";
-import type {Todo} from "./model/Todo.ts";
+import {useState} from "react";
 
 function App() {
     const [selectedDate, setSelectedDate] = useState(dayjs());
-    const [todos, setTodos] = useState<Todo[]>([]);
-
-    useEffect(() => {
-        (async () => {
-            const data = await TodoApi();
-            setTodos(data);
-        })();
-    }, []);
 
     return (
         <AppWrapper>
             <PageContainer>
-                <Calendar
-                    todos={todos}
-                    selectedDate={selectedDate}
-                    onSelect={setSelectedDate}
-                />
+                <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
                 <TodoList date={selectedDate} />
             </PageContainer>
         </AppWrapper>

@@ -3,6 +3,7 @@ package com.todo.mate.server.controller;
 import com.todo.mate.server.application.*;
 import com.todo.mate.server.controller.request.CreateTodoRequest;
 import com.todo.mate.server.controller.request.UpdateTodoRequest;
+import com.todo.mate.server.controller.response.GetMonthDoneCountResponse;
 import com.todo.mate.server.controller.response.Response;
 import com.todo.mate.server.controller.response.TodoDateCountResponse;
 import com.todo.mate.server.controller.response.TodoResponse;
@@ -19,13 +20,15 @@ public class TodoController {
     private final DeleteTodoUseCase deleteTodoUseCase;
     private final UpdateTodoUseCase updateTodoUseCase;
     private final GetMonthRemainingTodosUseCase  getMonthRemainingTodosUseCase;
+    private final GetMonthDoneCountUseCase getMonthDoneCountUseCase;
 
-    public TodoController(CreateTodoUseCase createTodoUseCase, ToggleTodoUseCase toggleTodoUseCase, DeleteTodoUseCase deleteTodoUseCase, UpdateTodoUseCase updateTodoUseCase, GetMonthRemainingTodosUseCase getMonthRemainingTodosUseCase) {
+    public TodoController(CreateTodoUseCase createTodoUseCase, ToggleTodoUseCase toggleTodoUseCase, DeleteTodoUseCase deleteTodoUseCase, UpdateTodoUseCase updateTodoUseCase, GetMonthRemainingTodosUseCase getMonthRemainingTodosUseCase, GetMonthDoneCountUseCase getMonthDoneCountUseCase) {
         this.createTodoUseCase = createTodoUseCase;
         this.toggleTodoUseCase = toggleTodoUseCase;
         this.deleteTodoUseCase = deleteTodoUseCase;
         this.updateTodoUseCase = updateTodoUseCase;
         this.getMonthRemainingTodosUseCase = getMonthRemainingTodosUseCase;
+        this.getMonthDoneCountUseCase = getMonthDoneCountUseCase;
     }
 
     @PostMapping
@@ -69,13 +72,13 @@ public class TodoController {
     }
 
     @GetMapping("/done-count")
-    public Response<List<TodoDateCountResponse>> getTodoDoneCount(
+    public Response<GetMonthDoneCountResponse> getTodoDoneCount(
             @RequestParam Integer year,
             @RequestParam Integer month
     ) {
         return Response.ok(
                 "해당 달에 달성한 Todo 갯수 반환 성공",
-                getMonthRemainingTodosUseCase.handle(GetMonthRemainingTodoCommand.of(year, month))
+                getMonthDoneCountUseCase.handle(GetMonthDoneCountCommand.of(year, month))
         );
     }
 }

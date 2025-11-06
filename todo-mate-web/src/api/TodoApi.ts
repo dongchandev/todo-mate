@@ -1,5 +1,5 @@
 import type {ApiResponse} from "./TodoResponse.ts";
-import type {Todo} from "../model/Todo.ts";
+import type {Todo, TodoDateCount, TodoMonthDoneCount} from "../model/Todo.ts";
 
 export default class TodoApi {
 
@@ -9,10 +9,6 @@ export default class TodoApi {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ content, dueDate }),
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
 
         const result: ApiResponse<Todo> = await response.json();
         console.log("📬 응답:", result);
@@ -27,10 +23,6 @@ export default class TodoApi {
             body: JSON.stringify({ content, memo }),
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
         const result: ApiResponse<Todo> = await response.json();
         console.log("📬 응답:", result);
 
@@ -43,10 +35,6 @@ export default class TodoApi {
             headers: { "Content-Type": "application/json" },
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
         const result = await response.json();
         console.log("📬 응답:", result);
     };
@@ -57,11 +45,27 @@ export default class TodoApi {
             headers: { "Content-Type": "application/json" },
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
         const result = await response.json();
         console.log("📬 응답:", result);
     };
+
+    static async getMonthRemainingCount(year: number, month: number): Promise<ApiResponse<TodoDateCount[]>> {
+        const res = await fetch(`http://localhost:8080/todos/remaining?year=${year}&month=${month}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+        console.log("📬 응답:", res);
+        return res.json();
+    }
+
+
+    static async getMonthDoneCount(year: number, month: number): Promise<ApiResponse<TodoMonthDoneCount>> {
+        const res = await fetch(`http://localhost:8080/todos/done-count?year=${year}&month=${month}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+        console.log("📬 응답:", res);
+        return res.json();
+    }
+
 }
