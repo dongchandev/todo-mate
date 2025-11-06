@@ -1,5 +1,5 @@
 import type {ApiResponse} from "./TodoResponse.ts";
-import type {Todo, TodoDateCount, TodoMonthDoneCount} from "../model/Todo.ts";
+import type {Todo, TodoDateCount, TodoMonthDoneCount} from "../models/Todo.ts";
 
 export default class TodoApi {
 

@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useCalendarStats } from "../hooks/useCalendarStats";
+import {getCalendarDays} from "../utils/calendar.ts";
 
 interface Props {
     selectedDate: Dayjs;
@@ -24,15 +25,7 @@ export default function Calendar({
     const [currentMonth, setCurrentMonth] = useState(dayjs());
     const [monthSummary, setMonthSummary] = useState<{ done: number }>({ done: 0 });
     const { loading } = useCalendarStats(currentMonth, refreshKey, setMonthStats, setMonthSummary);
-
-    const days: Dayjs[] = [];
-    const start = currentMonth.startOf("month").startOf("week");
-    const end = currentMonth.endOf("month").endOf("week");
-    let d = start;
-    while (d.isBefore(end) || d.isSame(end, "day")) {
-        days.push(d);
-        d = d.add(1, "day");
-    }
+    const days = getCalendarDays(currentMonth);
 
     return (
         <CalendarWrapper>

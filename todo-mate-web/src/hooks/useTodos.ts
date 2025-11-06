@@ -1,6 +1,6 @@
 import {useState, useCallback, useEffect} from "react";
 import TodoApi from "../api/TodoApi";
-import type { Todo } from "../model/Todo";
+import type { Todo } from "../models/Todo";
 import { Dayjs } from "dayjs";
 
 export function useTodos(date: Dayjs) {

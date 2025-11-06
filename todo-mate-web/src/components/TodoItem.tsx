@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { MoreHorizontal } from "lucide-react";
-import type {Todo} from "../model/Todo.ts";
+import type {Todo} from "../models/Todo.ts";
 
 
 interface Props {
