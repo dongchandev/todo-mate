@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import dayjs, { Dayjs } from "dayjs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import TodoApi from "../api/TodoApi";
+import { useCalendarStats } from "../hooks/useCalendarStats";
 
 interface Props {
     selectedDate: Dayjs;
@@ -11,9 +11,7 @@ interface Props {
 
 export default function Calendar({ selectedDate, onSelect }: Props) {
     const [currentMonth, setCurrentMonth] = useState(dayjs());
-    const [monthStats, setMonthStats] = useState<Record<string, { remaining: number }>>({});
-    const [monthSummary, setMonthSummary] = useState<{ done: number }>({ done: 0 });
-    const [loading, setLoading] = useState(false);
+    const { monthStats, monthSummary, loading } = useCalendarStats(currentMonth);
 
     const startOfMonth = currentMonth.startOf("month");
     const endOfMonth = currentMonth.endOf("month");
@@ -26,36 +24,6 @@ export default function Calendar({ selectedDate, onSelect }: Props) {
         days.push(d);
         d = d.add(1, "day");
     }
-
-    useEffect(() => {
-        const fetchStats = async () => {
-            setLoading(true);
-            try {
-                const year = currentMonth.year();
-                const month = currentMonth.month() + 1;
-
-                const remainingData = await TodoApi.getMonthRemainingCount(year, month);
-                const doneCount = await TodoApi.getMonthDoneCount(year, month);
-
-                const formatted = (remainingData.data ?? []).reduce(
-                    (acc, cur) => {
-                        acc[cur.date] = { remaining: cur.count };
-                        return acc;
-                    },
-                    {} as Record<string, { remaining: number }>
-                );
-
-                setMonthStats(formatted);
-                setMonthSummary({ done: doneCount.data?.count! });
-            } catch (e) {
-                console.error("달력 통계 불러오기 실패", e);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStats();
-    }, [currentMonth]);
 
     const handlePrevMonth = () => setCurrentMonth(currentMonth.subtract(1, "month"));
     const handleNextMonth = () => setCurrentMonth(currentMonth.add(1, "month"));
