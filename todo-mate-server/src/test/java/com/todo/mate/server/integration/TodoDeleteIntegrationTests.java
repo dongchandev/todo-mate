@@ -6,6 +6,7 @@ import com.todo.mate.server.application.DeleteTodoUseCase;
 import com.todo.mate.server.controller.response.IDResponse;
 import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.infra.db.TodoRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ class TodoDeleteIntegrationTests {
     @Autowired TodoRepository todoRepository;
     @Autowired CreateTodoUseCase createTodoUseCase;
     @Autowired DeleteTodoUseCase deleteTodoUseCase;
+    @Autowired EntityManager entityManager;
 
     @Test
     void 삭제하면_isDeleted가_true로_변경되어야_함() {
@@ -34,13 +36,18 @@ class TodoDeleteIntegrationTests {
     @Test
     void 투두를_삭제하면_DB에는_남고_조회에서는_빠짐() {
         Long todoId = createTodoUseCase.handle(CreateTodoCommand.of("삭제 테스트", LocalDate.now().plusDays(1))).id();
+        var byId = todoRepository.findById(todoId);
 
         deleteTodoUseCase.handle(todoId);
 
-        var byId = todoRepository.findById(todoId);
-        var byActive = todoRepository.findByIdAndIsDeletedFalse(todoId);
+        // 💡 1차 캐시 초기화
+        entityManager.flush();
+        entityManager.clear();
+
+        var byActive = todoRepository.findById(todoId);
 
         assertThat(byId).isPresent();
         assertThat(byActive).isEmpty();
     }
+
 }

@@ -16,6 +16,6 @@ public class ToggleTodoUseCase {
     public void handle(Long id){
         Todo todo = todoRepository.findByIdOrThrow(id);
         todo.toggleStatus();
-//        todoRepository.save(TodoMapper.toEntityWithId(todo));
+        todoRepository.save(todo);
     }
 }

@@ -1,6 +1,6 @@
 package com.todo.mate.server.application;
 
-import com.todo.mate.server.controller.response.IDResponse;
+import com.todo.mate.server.controller.response.TodoResponse;
 import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.infra.db.TodoRepository;
 import org.springframework.stereotype.Component;

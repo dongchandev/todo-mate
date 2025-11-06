@@ -7,11 +7,16 @@ import com.todo.mate.server.domain.vo.DueDate;
 import com.todo.mate.server.domain.vo.Memo;
 import com.todo.mate.server.enumeration.TodoStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "tb_todo")
+@SQLRestriction("is_deleted = false")
 public class Todo {
 
     @Id

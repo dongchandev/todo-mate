@@ -35,6 +35,16 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<Response<Void>> handleNoSuchElementException(IllegalArgumentException e) {
+        return ResponseEntity
+                .status(200)
+                .body(Response.of(
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage()
+                ));
+    }
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Response<Void>> handleException(Exception e, HttpServletRequest request) {
         return ResponseEntity

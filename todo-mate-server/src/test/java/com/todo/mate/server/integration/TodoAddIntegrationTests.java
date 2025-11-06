@@ -2,7 +2,7 @@ package com.todo.mate.server.integration;
 
 import com.todo.mate.server.application.CreateTodoCommand;
 import com.todo.mate.server.application.CreateTodoUseCase;
-import com.todo.mate.server.controller.response.IDResponse;
+import com.todo.mate.server.controller.response.TodoResponse;
 import com.todo.mate.server.domain.entity.Todo;
 import com.todo.mate.server.enumeration.TodoStatus;
 import com.todo.mate.server.infra.db.TodoRepository;
@@ -26,7 +26,7 @@ public class TodoAddIntegrationTests {
 
     @Test
     void 정상_생성시_DB에_저장되고_ID_반환() {
-        IDResponse res = createTodoUseCase.handle(CreateTodoCommand.of("독서하기", LocalDate.now()));
+        TodoResponse res = createTodoUseCase.handle(CreateTodoCommand.of("독서하기", LocalDate.now()));
 
         Todo entity = todoRepository.findById(res.id()).orElseThrow();
         assertEquals("독서하기", entity.getContent());
