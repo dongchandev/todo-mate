@@ -21,14 +21,16 @@ public class TodoController {
     private final UpdateTodoUseCase updateTodoUseCase;
     private final GetMonthRemainingTodosUseCase  getMonthRemainingTodosUseCase;
     private final GetMonthDoneCountUseCase getMonthDoneCountUseCase;
+    private final GetTodosByDateUseCase getTodosByDateUseCase;
 
-    public TodoController(CreateTodoUseCase createTodoUseCase, ToggleTodoUseCase toggleTodoUseCase, DeleteTodoUseCase deleteTodoUseCase, UpdateTodoUseCase updateTodoUseCase, GetMonthRemainingTodosUseCase getMonthRemainingTodosUseCase, GetMonthDoneCountUseCase getMonthDoneCountUseCase) {
+    public TodoController(CreateTodoUseCase createTodoUseCase, ToggleTodoUseCase toggleTodoUseCase, DeleteTodoUseCase deleteTodoUseCase, UpdateTodoUseCase updateTodoUseCase, GetMonthRemainingTodosUseCase getMonthRemainingTodosUseCase, GetMonthDoneCountUseCase getMonthDoneCountUseCase, GetTodosByDateUseCase getTodosByDateUseCase) {
         this.createTodoUseCase = createTodoUseCase;
         this.toggleTodoUseCase = toggleTodoUseCase;
         this.deleteTodoUseCase = deleteTodoUseCase;
         this.updateTodoUseCase = updateTodoUseCase;
         this.getMonthRemainingTodosUseCase = getMonthRemainingTodosUseCase;
         this.getMonthDoneCountUseCase = getMonthDoneCountUseCase;
+        this.getTodosByDateUseCase = getTodosByDateUseCase;
     }
 
     @PostMapping
@@ -79,6 +81,16 @@ public class TodoController {
         return Response.ok(
                 "해당 달에 달성한 Todo 갯수 반환 성공",
                 getMonthDoneCountUseCase.handle(GetMonthDoneCountCommand.of(year, month))
+        );
+    }
+
+    @GetMapping
+    public Response<List<TodoResponse>> getTodoByDate(
+            @RequestParam LocalDate date
+    ) {
+        return Response.ok(
+                "해당 달에 달성한 Todo 갯수 반환 성공",
+                getTodosByDateUseCase.handle(date)
         );
     }
 }

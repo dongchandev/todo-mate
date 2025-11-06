@@ -6,14 +6,17 @@ import com.todo.mate.server.application.CreateTodoUseCase;
 import com.todo.mate.server.controller.response.TodoResponse;
 import com.todo.mate.server.controller.request.CreateTodoRequest;
 import com.todo.mate.server.controller.request.UpdateTodoRequest;
+import com.todo.mate.server.enumeration.TodoStatus;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -77,6 +80,16 @@ public class TodoControllerIntegrationTest {
     void get_month_done_count_todo_API() throws Exception {
         TodoResponse res = createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now()));
         mockMvc.perform(get("/todos/done-count?year={date}&month={month}", res.date().getYear(), res.date().getMonthValue()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void 특정_날짜의_Todo_조회_API() throws Exception {
+        createTodoUseCase.handle(CreateTodoCommand.of("공부하기", LocalDate.now()));
+
+        mockMvc.perform(get("/todos")
+                        .param("date", "2025-11-06")
+                        .contentType("application/json"))
                 .andExpect(status().isOk());
     }
 }

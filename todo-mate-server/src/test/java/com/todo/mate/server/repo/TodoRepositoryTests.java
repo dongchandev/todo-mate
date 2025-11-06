@@ -1,6 +1,7 @@
 package com.todo.mate.server.repo;
 
 import com.todo.mate.server.domain.entity.Todo;
+import com.todo.mate.server.domain.vo.DueDate;
 import com.todo.mate.server.infra.db.TodoDateCountProjection;
 import com.todo.mate.server.infra.db.TodoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,5 +58,21 @@ public class TodoRepositoryTests {
         long doneCount = todoRepository.countDoneByMonth(2025, 11);
 
         assertThat(doneCount).isEqualTo(1L);
+    }
+
+    @Test
+    void 특정_날짜의_Todo를_DB에서_조회한다() {
+        LocalDate today = LocalDate.now();
+
+        todoRepository.save(Todo.create("A", today));
+        todoRepository.save(Todo.create("B", today));
+        todoRepository.save(Todo.create("C", today.plusDays(1)));
+
+        List<Todo> result = todoRepository.findAllByDueDate(DueDate.of(today));
+
+        assertThat(result)
+                .hasSize(2)
+                .extracting("content")
+                .containsExactlyInAnyOrder("A", "B");
     }
 }

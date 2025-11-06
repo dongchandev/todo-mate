@@ -1,11 +1,13 @@
 package com.todo.mate.server.infra.db;
 
 import com.todo.mate.server.domain.entity.Todo;
+import com.todo.mate.server.domain.vo.DueDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,6 +35,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
             @Param("month") int month
     );
 
+    List<Todo> findAllByDueDate(DueDate dueDate);
 
     @Query("""
         SELECT COUNT(t)
