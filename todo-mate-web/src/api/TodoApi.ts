@@ -68,4 +68,9 @@ export default class TodoApi {
         return res.json();
     }
 
+    static async getTodosByDate(date: string) {
+        const res = await fetch(`http://localhost:8080/todos?date=${date}`);
+        console.log("📬 응답:", res);
+        return res.json();
+    }
 }

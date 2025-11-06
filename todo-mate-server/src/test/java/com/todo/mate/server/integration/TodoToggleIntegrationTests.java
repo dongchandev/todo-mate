@@ -31,14 +31,11 @@ class TodoToggleIntegrationTests {
 
     @Test
     void 토글_하면_DB_상태가_반영된다() {
-        // given
         Todo todo = Todo.create("책 읽기", LocalDate.now().plusDays(1));
         todo = repo.save(todo);
 
-        // when: 유스케이스 호출
         toggleTodoUseCase.handle(todo.getId());
 
-        // then: DB에 반영됐는지 확인
         var found = repo.findById(todo.getId()).orElseThrow();
         assertEquals(TodoStatus.DONE, found.getStatus());
     }

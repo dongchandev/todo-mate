@@ -1,42 +1,47 @@
 import styled from "styled-components";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 import { useCalendarStats } from "../hooks/useCalendarStats";
 
 interface Props {
     selectedDate: Dayjs;
     onSelect: (date: Dayjs) => void;
+    refreshKey: number;
+    monthStats: Record<string, { remaining: number }>;
+    setMonthStats: React.Dispatch<
+        React.SetStateAction<Record<string, { remaining: number }>>
+    >;
 }
 
-export default function Calendar({ selectedDate, onSelect }: Props) {
+export default function Calendar({
+                                     selectedDate,
+                                     onSelect,
+                                     refreshKey,
+                                     monthStats,
+                                     setMonthStats,
+                                 }: Props) {
     const [currentMonth, setCurrentMonth] = useState(dayjs());
-    const { monthStats, monthSummary, loading } = useCalendarStats(currentMonth);
-
-    const startOfMonth = currentMonth.startOf("month");
-    const endOfMonth = currentMonth.endOf("month");
-    const startDate = startOfMonth.startOf("week");
-    const endDate = endOfMonth.endOf("week");
+    const [monthSummary, setMonthSummary] = useState<{ done: number }>({ done: 0 });
+    const { loading } = useCalendarStats(currentMonth, refreshKey, setMonthStats, setMonthSummary);
 
     const days: Dayjs[] = [];
-    let d = startDate;
-    while (d.isBefore(endDate) || d.isSame(endDate, "day")) {
+    const start = currentMonth.startOf("month").startOf("week");
+    const end = currentMonth.endOf("month").endOf("week");
+    let d = start;
+    while (d.isBefore(end) || d.isSame(end, "day")) {
         days.push(d);
         d = d.add(1, "day");
     }
 
-    const handlePrevMonth = () => setCurrentMonth(currentMonth.subtract(1, "month"));
-    const handleNextMonth = () => setCurrentMonth(currentMonth.add(1, "month"));
-    const isSameDay = (a: Dayjs, b: Dayjs) => a.isSame(b, "day");
-
     return (
         <CalendarWrapper>
             <Header>
-                <NavButton onClick={handlePrevMonth}>
+                <NavButton onClick={() => setCurrentMonth(currentMonth.subtract(1, "month"))}>
                     <ChevronLeft size={18} />
                 </NavButton>
                 <MonthLabel>{currentMonth.format("YYYY년 MM월")}</MonthLabel>
-                <NavButton onClick={handleNextMonth}>
+                <NavButton onClick={() => setCurrentMonth(currentMonth.add(1, "month"))}>
                     <ChevronRight size={18} />
                 </NavButton>
             </Header>
@@ -61,21 +66,19 @@ export default function Calendar({ selectedDate, onSelect }: Props) {
                 {days.map((d) => {
                     const key = d.format("YYYY-MM-DD");
                     const remaining = monthStats[key]?.remaining ?? 0;
+                    const isSelected = d.isSame(selectedDate, "day");
                     const isCurrentMonth = d.isSame(currentMonth, "month");
-                    const isToday = d.isSame(dayjs(), "day");
-                    const isSelected = isSameDay(d, selectedDate);
 
                     return (
                         <DayCell
                             key={key}
                             $dim={!isCurrentMonth}
-                            $today={isToday}
                             $selected={isSelected}
                             onClick={() => onSelect(d)}
                         >
                             <DateNumber>{d.date()}</DateNumber>
                             <RemainingCount $zero={remaining === 0}>
-                                {remaining > 0 ? `${remaining}개 남음` : "완료"}
+                                {remaining > 0 ? `${remaining}개 남음` : "완료 🎉"}
                             </RemainingCount>
                         </DayCell>
                     );
@@ -84,7 +87,6 @@ export default function Calendar({ selectedDate, onSelect }: Props) {
         </CalendarWrapper>
     );
 }
-
 const CalendarWrapper = styled.div`
     flex: 0 0 45%;
     max-width: 45%;

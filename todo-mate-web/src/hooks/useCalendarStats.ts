@@ -2,9 +2,15 @@ import { useState, useEffect } from "react";
 import { Dayjs } from "dayjs";
 import TodoApi from "../api/TodoApi";
 
-export function useCalendarStats(currentMonth: Dayjs) {
-    const [monthStats, setMonthStats] = useState<Record<string, { remaining: number }>>({});
-    const [monthSummary, setMonthSummary] = useState<{ done: number }>({ done: 0 });
+export function useCalendarStats(
+    currentMonth: Dayjs,
+    refreshKey: number,
+    setMonthStats: React.Dispatch<
+        React.SetStateAction<Record<string, { remaining: number }>>
+    >,
+    setMonthSummary?: React.Dispatch<React.SetStateAction<{ done: number }>>
+) {
+    const [monthSummary, _setMonthSummary] = useState<{ done: number }>({ done: 0 });
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -26,7 +32,8 @@ export function useCalendarStats(currentMonth: Dayjs) {
                 );
 
                 setMonthStats(formatted);
-                setMonthSummary({ done: doneCount.data?.count ?? 0 });
+                _setMonthSummary({ done: doneCount.data?.count ?? 0 });
+                setMonthSummary?.({ done: doneCount.data?.count ?? 0 });
             } catch (e) {
                 console.error("달력 통계 불러오기 실패", e);
             } finally {
@@ -35,7 +42,7 @@ export function useCalendarStats(currentMonth: Dayjs) {
         };
 
         fetchStats();
-    }, [currentMonth]);
+    }, [currentMonth, refreshKey]);
 
-    return { monthStats, monthSummary, loading };
+    return { monthSummary, loading, setMonthSummary: _setMonthSummary };
 }

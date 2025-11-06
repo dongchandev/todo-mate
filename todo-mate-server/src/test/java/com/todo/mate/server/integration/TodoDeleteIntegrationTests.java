@@ -40,7 +40,6 @@ class TodoDeleteIntegrationTests {
 
         deleteTodoUseCase.handle(todoId);
 
-        // 💡 1차 캐시 초기화
         entityManager.flush();
         entityManager.clear();
 

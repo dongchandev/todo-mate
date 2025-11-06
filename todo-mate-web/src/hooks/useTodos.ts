@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import {useState, useCallback, useEffect} from "react";
 import TodoApi from "../api/TodoApi";
 import type { Todo } from "../model/Todo";
 import { Dayjs } from "dayjs";
@@ -8,6 +8,18 @@ export function useTodos(date: Dayjs) {
     const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
     const filtered = todos.filter((t) => t.date === date.format("YYYY-MM-DD"));
+
+    useEffect(() => {
+        const fetchTodos = async () => {
+            try {
+                const response = await TodoApi.getTodosByDate(date.format("YYYY-MM-DD"));
+                setTodos(response.data ?? []);
+            } catch (e) {
+                console.error("할 일 불러오기 실패:", e);
+            }
+        };
+        fetchTodos();
+    }, [date]);
 
     const handleAdd = useCallback(async (text: string) => {
         if (!text.trim()) return;

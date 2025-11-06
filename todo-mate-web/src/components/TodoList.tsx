@@ -1,15 +1,16 @@
-import {Dayjs} from "dayjs";
+import { Dayjs } from "dayjs";
 import styled from "styled-components";
 import TodoItem from "./TodoItem";
 import TodoInput from "./TodoInput";
 import TodoActionModal from "./TodoActionModal";
-import {useTodos} from "../hooks/useTodos.ts";
+import { useTodos } from "../hooks/useTodos";
 
 interface Props {
     date: Dayjs;
+    onSync: () => void;
 }
 
-export default function TodoList({ date }: Props) {
+export default function TodoList({ date, onSync }: Props) {
     const {
         filtered,
         selectedTodo,
@@ -21,6 +22,21 @@ export default function TodoList({ date }: Props) {
         handleEditMemo,
     } = useTodos(date);
 
+    const handleAddAndSync = async (text: string) => {
+        await handleAdd(text);
+        onSync();
+    };
+
+    const handleToggleAndSync = async (id: number) => {
+        await handleToggle(id);
+        onSync();
+    };
+
+    const handleDeleteAndSync = async (id: number) => {
+        await handleDelete(id);
+        onSync();
+    };
+
     return (
         <Wrapper>
             {filtered.length === 0 ? (
@@ -30,20 +46,20 @@ export default function TodoList({ date }: Props) {
                     <TodoItem
                         key={t.id}
                         todo={t}
-                        onToggle={handleToggle}
-                        onOpenAction={(todo) => setSelectedTodo(todo)}
+                        onToggle={() => handleToggleAndSync(t.id)}
+                        onOpenAction={setSelectedTodo}
                     />
                 ))
             )}
 
             <Divider />
-            <TodoInput onAdd={handleAdd} />
+            <TodoInput onAdd={handleAddAndSync} />
 
             {selectedTodo && (
                 <TodoActionModal
                     todo={selectedTodo}
                     onClose={() => setSelectedTodo(null)}
-                    onDelete={handleDelete}
+                    onDelete={(id) => handleDeleteAndSync(id)}
                     onEdit={handleEdit}
                     onEditMemo={handleEditMemo}
                 />
