@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {colors} from "../styles/colors.ts";
 
 export default function PageContainer({ children }: { children: React.ReactNode }) {
     return <Container>{children}</Container>;
@@ -11,7 +12,7 @@ const Container = styled.div`
     justify-content: space-between;
     gap: 24px;
     padding: 24px;
-    background-color: #1e1e1e;
+    background-color: ${colors.background};
     border-radius: 12px;
     box-sizing: border-box;
 `;

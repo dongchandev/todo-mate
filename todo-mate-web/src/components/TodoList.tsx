@@ -4,6 +4,7 @@ import TodoItem from "./TodoItem";
 import TodoInput from "./TodoInput";
 import TodoActionModal from "./TodoActionModal";
 import { useTodos } from "../hooks/useTodos";
+import {colors} from "../styles/colors.ts";
 
 interface Props {
     date: Dayjs;
@@ -73,10 +74,10 @@ const Wrapper = styled.div`
 `;
 
 const Empty = styled.p`
-    color: #aaa;
+    color: ${colors.textSecondary};
 `;
 
 const Divider = styled.div`
     margin: 12px 0;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid ${colors.border};
 `;

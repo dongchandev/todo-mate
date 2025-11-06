@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import {colors} from "../styles/colors.ts";
 
 export default function TodoInput({ onAdd }: { onAdd: (text: string) => void }) {
     const [text, setText] = useState("");
@@ -25,8 +26,8 @@ export default function TodoInput({ onAdd }: { onAdd: (text: string) => void }) 
 const Input = styled.input`
     width: 100%;
     padding: 8px 12px;
-    background: #222;
-    color: #fff;
+    background: ${colors.inputSurface};
+    color: ${colors.textPrimary};
     border: none;
     border-radius: 6px;
     outline: none;

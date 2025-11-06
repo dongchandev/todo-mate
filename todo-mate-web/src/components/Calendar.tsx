@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useCalendarStats } from "../hooks/useCalendarStats";
 import {getCalendarDays} from "../utils/calendar.ts";
+import { colors } from "../styles/colors.ts";
 
 interface Props {
     selectedDate: Dayjs;
@@ -91,12 +92,12 @@ const CalendarWrapper = styled.div`
     max-width: 45%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background-color: #1e1e1e;
+    background-color: ${colors.background};
     border-radius: 16px;
     margin-right: 20px;
     padding: 16px;
     box-sizing: border-box;
-    color: #fff;
+    color: ${colors.textPrimary};
     display: flex;
     flex-direction: column;
 `;
@@ -111,12 +112,12 @@ const Header = styled.div`
 const NavButton = styled.button`
     background: none;
     border: none;
-    color: #fff;
+    color: ${colors.textPrimary}
     cursor: pointer;
     padding: 6px;
     border-radius: 8px;
     &:hover {
-        background: #2b2b2b;
+        background: ${colors.surface};
     }
 `;
 
@@ -129,12 +130,12 @@ const MonthStats = styled.div`
     margin-top: 10px;
     margin-bottom: 16px;
     text-align: center;
-    color: #ccc;
+    color: ${colors.textPrimary};
     font-size: 14px;
 `;
 
 const Highlight = styled.span`
-    color: #4caf50;
+    color: ${colors.accent};
     font-weight: 700;
 `;
 
@@ -144,7 +145,7 @@ const DayHeaderRow = styled.div`
     text-align: center;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #bbb;
+    color: ${colors.textSecondary};
 `;
 
 const DayHeader = styled.div`
@@ -168,10 +169,10 @@ const DayCell = styled.div<{ $dim?: boolean; $today?: boolean; $selected?: boole
     border-radius: 10px;
     cursor: pointer;
     font-weight: ${({ $selected }) => ($selected ? 700 : 400)};
-    color: ${({ $dim }) => ($dim ? "#555" : "#fff")};
-    background: ${({ $selected }) => ($selected ? "#333" : "transparent")};
+    color: ${({ $dim }) => ($dim ? colors.textMuted : colors.textPrimary)};
+    background: ${({ $selected }) => ($selected ? colors.border : "transparent")};
     &:hover {
-        background: #2b2b2b;
+        background: ${colors.surface};
     }
 `;
 
@@ -181,6 +182,6 @@ const DateNumber = styled.div`
 
 const RemainingCount = styled.div<{ $zero?: boolean }>`
     font-size: 12px;
-    color: ${({ $zero }) => ($zero ? "#4caf50" : "#aaa")};
+    color: ${({ $zero }) => ($zero ? colors.accent : colors.textSecondary)};
     margin-top: 4px;
 `;

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { MoreHorizontal } from "lucide-react";
 import type {Todo} from "../models/Todo.ts";
+import {colors} from "../styles/colors.ts";
 
 
 interface Props {
@@ -35,7 +36,7 @@ const Item = styled.div<{ done: boolean }>`
     gap: 10px;
     padding: 8px 12px;
     border-radius: 6px;
-    color: #fff;
+    color: ${colors.textPrimary};
     text-decoration: ${({ done }) => (done ? "line-through" : "none")};
     cursor: pointer;
 
@@ -48,6 +49,6 @@ const Item = styled.div<{ done: boolean }>`
 const Checkbox = styled.input`
     width: 18px;
     height: 18px;
-    accent-color: #646cff;
+    accent-color: ${colors.secondAccent};
     pointer-events: none;
 `;

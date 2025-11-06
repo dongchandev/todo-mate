@@ -2,6 +2,7 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { Pencil, Trash2, FileText, Check } from "lucide-react";
 import { useState } from "react";
+import {colors} from "../styles/colors.ts";
 
 export default function TodoActionModal({
                                             todo,
@@ -92,12 +93,12 @@ const Overlay = styled.div`
 `;
 
 const Modal = styled.div`
-    background: #1e1e1e;
+    background: ${colors.background};
     width: 100%;
     max-width: 500px;
     border-radius: 16px 16px 0 0;
     padding: 20px;
-    color: #fff;
+    color: ${colors.textPrimary};
     box-sizing: border-box;
 `;
 
@@ -109,11 +110,11 @@ const Header = styled.div`
 
 const EditInput = styled.input`
     width: 100%;
-    background: #111;
-    border: 1px solid #333;
+    background: ${colors.inputSurface};
+    border: 1px solid ${colors.border};
     border-radius: 6px;
     padding: 8px;
-    color: #fff;
+    color: ${colors.textPrimary};
     outline: none;
 `;
 
@@ -125,8 +126,8 @@ const ButtonRow = styled.div`
 
 const ActionButton = styled.button<{ $delete?: boolean }>`
     flex: 1;
-    background: ${({ $delete }) => ($delete ? "#3a2b2b" : "#2b2b2b")};
-    color: ${({ $delete }) => ($delete ? "#ff6b6b" : "#fff")};
+    background: ${({ $delete }) => ($delete ? colors.secondBackground : colors.surface)};
+    color: ${({ $delete }) => ($delete ? colors.danger : colors.textPrimary)};
     border: none;
     border-radius: 10px;
     padding: 12px;
@@ -144,17 +145,17 @@ const MemoBox = styled.div`
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    color: #ffca28;
+    color: ${colors.memo};
 `;
 
 const MemoArea = styled.textarea`
     margin-top: 10px;
     width: 100%;
     height: 200px;
-    background: #111;
+    background: ${colors.surface};
     border-radius: 10px;
     padding: 10px;
-    color: #ddd;
+    color: ${colors.textSecondary};
     border: none;
     resize: none;
     outline: none;
