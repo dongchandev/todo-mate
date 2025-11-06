@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import dayjs from "dayjs";
+import styled from "styled-components";
+import { useState } from "react";
+import PageContainer from "./components/PageContainer";
+import Calendar from "./components/Calendar";
+import TodoList from "./components/TodoList";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [selectedDate, setSelectedDate] = useState(dayjs());
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [monthStats, setMonthStats] = useState<
+        Record<string, { remaining: number }>
+    >({});
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const handleSync = () => setRefreshKey((prev) => prev + 1);
+
+    return (
+        <AppWrapper>
+            <PageContainer>
+                <Calendar
+                    selectedDate={selectedDate}
+                    onSelect={setSelectedDate}
+                    refreshKey={refreshKey}
+                    monthStats={monthStats}
+                    setMonthStats={setMonthStats}
+                />
+                <TodoList
+                    date={selectedDate}
+                    onSync={handleSync}
+                />
+            </PageContainer>
+        </AppWrapper>
+    );
 }
 
-export default App
+export default App;
+
+const AppWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
